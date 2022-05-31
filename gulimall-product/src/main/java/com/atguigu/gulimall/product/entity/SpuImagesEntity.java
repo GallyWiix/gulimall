@@ -10,9 +10,9 @@ import lombok.Data;
 /**
  * spu图片
  * 
- * @author leifengyang
- * @email leifengyang@gmail.com
- * @date 2019-10-01 21:08:49
+ * @author hygod
+ * @email jeremygit@163.com
+ * @date 2022-05-31 18:44:53
  */
 @Data
 @TableName("pms_spu_images")

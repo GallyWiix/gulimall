@@ -20,9 +20,9 @@ import com.atguigu.common.utils.R;
 /**
  * 支付信息表
  *
- * @author leifengyang
- * @email leifengyang@gmail.com
- * @date 2019-10-08 09:56:16
+ * @author hygod
+ * @email jeremygit@163.com
+ * @date 2022-05-31 19:35:17
  */
 @RestController
 @RequestMapping("order/paymentinfo")

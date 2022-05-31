@@ -20,9 +20,9 @@ import com.atguigu.common.utils.R;
 /**
  * 商品评价
  *
- * @author leifengyang
- * @email leifengyang@gmail.com
- * @date 2019-10-01 22:50:32
+ * @author hygod
+ * @email jeremygit@163.com
+ * @date 2022-05-31 18:44:53
  */
 @RestController
 @RequestMapping("product/spucomment")

@@ -4,7 +4,11 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.atguigu.gulimall.coupon.entity.SpuBoundsEntity;
 import com.atguigu.gulimall.coupon.service.SpuBoundsService;
@@ -16,9 +20,9 @@ import com.atguigu.common.utils.R;
 /**
  * 商品spu积分设置
  *
- * @author leifengyang
- * @email leifengyang@gmail.com
- * @date 2019-10-08 09:36:40
+ * @author hygod
+ * @email jeremygit@163.com
+ * @date 2022-05-31 19:20:33
  */
 @RestController
 @RequestMapping("coupon/spubounds")
@@ -52,7 +56,7 @@ public class SpuBoundsController {
     /**
      * 保存
      */
-    @PostMapping("/save")
+    @RequestMapping("/save")
     //@RequiresPermissions("coupon:spubounds:save")
     public R save(@RequestBody SpuBoundsEntity spuBounds){
 		spuBoundsService.save(spuBounds);

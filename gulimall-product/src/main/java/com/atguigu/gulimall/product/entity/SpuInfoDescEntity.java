@@ -1,6 +1,5 @@
 package com.atguigu.gulimall.product.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -11,9 +10,9 @@ import lombok.Data;
 /**
  * spu信息介绍
  * 
- * @author leifengyang
- * @email leifengyang@gmail.com
- * @date 2019-10-01 21:08:49
+ * @author hygod
+ * @email jeremygit@163.com
+ * @date 2022-05-31 18:44:53
  */
 @Data
 @TableName("pms_spu_info_desc")
@@ -23,7 +22,7 @@ public class SpuInfoDescEntity implements Serializable {
 	/**
 	 * 商品id
 	 */
-	@TableId(type = IdType.INPUT)
+	@TableId
 	private Long spuId;
 	/**
 	 * 商品介绍

@@ -9,9 +9,9 @@ import java.util.Map;
 /**
  * 会员
  *
- * @author leifengyang
- * @email leifengyang@gmail.com
- * @date 2019-10-08 09:47:05
+ * @author hygod
+ * @email jeremygit@163.com
+ * @date 2022-05-31 19:28:20
  */
 public interface MemberService extends IService<MemberEntity> {
 
