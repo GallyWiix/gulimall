@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.atguigu.common.utils.Query;
 
 import com.atguigu.gulimall.product.dao.SpuInfoDao;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 
 @Service("spuInfoService")
@@ -67,7 +69,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         //2.保存spu描述图片 pms_spu_info_desc
         List<String> decript = vo.getDecript();
         SpuInfoDescEntity spuInfoDescEntity = new SpuInfoDescEntity();
-        spuInfoDescEntity.setSpuId(spuInfoDescEntity.getSpuId());
+        spuInfoDescEntity.setSpuId(spuInfoEntity.getId());
         spuInfoDescEntity.setDecript(String.join(",",decript));
         spuInfoDescService.saveSpuInfoDesc(spuInfoDescEntity);
         //3.保存spu图片集 pms_spu_images
@@ -83,7 +85,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             productAttrValueEntity.setAttrName(byId.getAttrName());
             productAttrValueEntity.setAttrValue(attr.getAttrValues());
             productAttrValueEntity.setQuickShow(attr.getShowDesc());
-            productAttrValueEntity.setId(spuInfoEntity.getId());
+            productAttrValueEntity.setSpuId(spuInfoEntity.getId());
 
             return productAttrValueEntity;
         }).collect(Collectors.toList());
@@ -127,10 +129,12 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 skuImagesEntity.setDefaultImg(img.getDefaultImg());
                 skuImagesEntity.setImgUrl(img.getImgUrl());
                 return skuImagesEntity;
+            }).filter(entity->{
+                return StringUtils.isEmpty(entity.getImgUrl());
             }).collect(Collectors.toList());
                 //5.2sku图片 pms_sku_images
             skuImagesService.saveBatch(imagesEntities);
-            //5.3sku销售属性 pms_sku_sale_attr_value
+            //5.3sku销售属性 pms_sku_sale_attr_value//TODO 没有图片的无需保存
             List<Attr> attr = item.getAttr();
                 List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = attr.stream().map(a -> {
                     SkuSaleAttrValueEntity skuSaleAttrValueEntity = new SkuSaleAttrValueEntity();
@@ -144,9 +148,11 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 SkuReductionTo skuReductionTo = new SkuReductionTo();
                 BeanUtils.copyProperties(item,skuReductionTo);
                 skuReductionTo.setSkuId(skuId);
-                R r1 = couponFeignService.saveSkuReduction(skuReductionTo);
-                if(r1.getCode() != 0){
-                    log.error("远程保存sku优惠信息失败");
+                if (skuReductionTo.getFullCount() > 0 || skuReductionTo.getFullPrice().compareTo(BigDecimal.ZERO) == 1) {
+                    R r1 = couponFeignService.saveSkuReduction(skuReductionTo);
+                    if (r1.getCode() != 0) {
+                        log.error("远程保存sku优惠信息失败");
+                    }
                 }
 
 
@@ -164,6 +170,38 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         this.baseMapper.insert(spuInfoEntity);
     }
 
+    @Override
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+
+        QueryWrapper<SpuInfoEntity> wrapper = new QueryWrapper<>();
+
+        // 根据 spu管理带来的条件进行叠加模糊查询
+        String key = (String) params.get("key");
+        if (!StringUtils.isEmpty(key)) {
+            wrapper.and(w -> w.eq("id", key).or().like("spu_name", key));
+        }
+
+        String status = (String) params.get("status");
+        if (!StringUtils.isEmpty(status)) {
+            wrapper.eq("publish_status", status);
+        }
+
+        String brandId = (String) params.get("brandId");
+        if (!StringUtils.isEmpty(brandId) && !"0".equalsIgnoreCase(brandId)) {
+            wrapper.eq("brand_id", brandId);
+        }
+
+        String catelogId = (String) params.get("catelogId");
+        if (!StringUtils.isEmpty(catelogId) && !"0".equalsIgnoreCase(catelogId)) {
+            wrapper.eq("catalog_id", catelogId);
+        }
+
+        IPage<SpuInfoEntity> page = this.page(
+                new Query<SpuInfoEntity>().getPage(params),
+                wrapper
+        );
+        return new PageUtils(page);
+    }
 
 
 }

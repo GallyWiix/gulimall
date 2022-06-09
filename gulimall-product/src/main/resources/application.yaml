@@ -11,6 +11,8 @@ spring:
     alicloud:
       access-key: LTAI5tC5FoLG8eVZJJDeAuGs
       secret-key: QUE1xSIdNOqD4itoFt1Vx1xkHaa1Pa
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
