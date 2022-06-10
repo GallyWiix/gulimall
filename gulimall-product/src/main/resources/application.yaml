@@ -9,8 +9,8 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
     alicloud:
-      access-key: LTAI5tC5FoLG8eVZJJDeAuGs
-      secret-key: QUE1xSIdNOqD4itoFt1Vx1xkHaa1Pa
+      access-key: 
+      secret-key: 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 mybatis-plus:
